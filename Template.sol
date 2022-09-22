@@ -4,9 +4,10 @@
 pragma solidity ^0.8.4;
 
 import "./ERC721A.sol";
+import "./Ownable.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
-contract FragnovaNFTTemplate is ERC721A, Initializable {
+contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable {
     function _getImmutableVariablesOffset()
         internal
         pure
@@ -23,6 +24,8 @@ contract FragnovaNFTTemplate is ERC721A, Initializable {
     constructor() ERC721A("", "") {}
 
     function bootstrap() public initializer {
+        Ownable.bootstrap();
+
         uint256 offset = _getImmutableVariablesOffset();
 
         uint256 quantity;
