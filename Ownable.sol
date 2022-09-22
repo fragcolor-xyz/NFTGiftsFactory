@@ -18,7 +18,7 @@ abstract contract Ownable {
         _bootstrap(DEFAULT_PROTOCOL_OWNER);
     }
 
-    function _bootstrap() public {
+    function _bootstrap() internal {
         _owner = DEFAULT_PROTOCOL_OWNER;
         emit OwnershipTransferred(address(0), DEFAULT_PROTOCOL_OWNER);
     }

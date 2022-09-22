@@ -24,7 +24,7 @@ contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable {
     constructor() ERC721A("", "") {}
 
     function bootstrap() public initializer {
-        Ownable.bootstrap();
+        Ownable._bootstrap(tx.origin);
 
         uint256 offset = _getImmutableVariablesOffset();
 
