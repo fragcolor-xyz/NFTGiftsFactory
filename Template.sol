@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 // Fragnova Simple NFT Template
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.7;
 
 import "./ERC721A.sol";
 import "./Ownable.sol";
+import "./RoyaltiesReceiver.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
-contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable {
+contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable, RoyaltiesReceiver {
     function _getImmutableVariablesOffset()
         internal
         pure
@@ -24,9 +25,11 @@ contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable {
     constructor() ERC721A("", "") {}
 
     function bootstrap() public initializer {
+        uint256 offset = _getImmutableVariablesOffset();
+
         Ownable._bootstrap(tx.origin);
 
-        uint256 offset = _getImmutableVariablesOffset();
+        setupRoyalties(tx.origin, 500);
 
         uint256 quantity;
         assembly {
@@ -42,7 +45,7 @@ contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable {
         assembly {
             nameBytes := calldataload(offset)
         }
-        return string(abi.encodePacked(nameBytes));
+        return toString(nameBytes);
     }
 
     function symbol() public view virtual override returns (string memory) {
@@ -51,7 +54,7 @@ contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable {
         assembly {
             symbolBytes := calldataload(add(offset, 0x20))
         }
-        return string(abi.encodePacked(symbolBytes));
+        return toString(symbolBytes);
     }
 
     function _baseURI() internal pure override returns (string memory _url) {
@@ -60,6 +63,26 @@ contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable {
         assembly {
             baseUrlBytes := calldataload(add(offset, 0x40))
         }
-        return string(abi.encodePacked(baseUrlBytes));
+        return toString(baseUrlBytes);
+    }
+
+    function toString(bytes32 source)
+        internal
+        pure
+        returns (string memory result)
+    {
+        uint8 length = 0;
+        while (source[length] != 0 && length < 32) {
+            length++;
+        }
+        assembly {
+            result := mload(0x40)
+            // new "memory end" including padding (the string isn't larger than 32 bytes)
+            mstore(0x40, add(result, 0x40))
+            // store length in memory
+            mstore(result, length)
+            // write actual data
+            mstore(add(result, 0x20), source)
+        }
     }
 }

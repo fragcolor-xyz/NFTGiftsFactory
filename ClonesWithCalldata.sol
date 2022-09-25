@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Thank you: https://github.com/ZeframLou/vested-erc20/blob/main/src/lib/ClonesWithCallData.sol
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.7;
 
 library ClonesWithCallData {
     function cloneWithCallDataProvision(
