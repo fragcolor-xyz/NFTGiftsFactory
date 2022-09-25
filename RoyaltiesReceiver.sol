@@ -3,9 +3,10 @@
 
 pragma solidity ^0.8.7;
 
+import "./Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-contract RoyaltiesReceiver {
+contract RoyaltiesReceiver is Ownable {
     using SafeERC20 for IERC20;
 
     uint256 public constant FRAGMENT_ROYALTIES_BPS = 700;
@@ -46,7 +47,7 @@ contract RoyaltiesReceiver {
     function setupRoyalties(
         address payable royaltiesRecipient,
         uint256 royaltiesBps
-    ) internal {
+    ) external onlyOwner {
         bytes32 slot = SLOT_royaltiesRecipient;
         assembly {
             sstore(slot, royaltiesRecipient)

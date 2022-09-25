@@ -8,7 +8,12 @@ import "./Ownable.sol";
 import "./RoyaltiesReceiver.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
-contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable, RoyaltiesReceiver {
+contract FragnovaNFTTemplate is
+    ERC721A,
+    Initializable,
+    Ownable,
+    RoyaltiesReceiver
+{
     function _getImmutableVariablesOffset()
         internal
         pure
@@ -28,8 +33,6 @@ contract FragnovaNFTTemplate is ERC721A, Initializable, Ownable, RoyaltiesReceiv
         uint256 offset = _getImmutableVariablesOffset();
 
         Ownable._bootstrap(tx.origin);
-
-        setupRoyalties(tx.origin, 500);
 
         uint256 quantity;
         assembly {
