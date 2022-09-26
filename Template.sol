@@ -29,6 +29,18 @@ contract FragnovaNFTTemplate is
 
     constructor() ERC721A("", "") {}
 
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override
+        returns (bool)
+    {
+        return
+            _supportsInterface(interfaceId) ||
+            super.supportsInterface(interfaceId);
+    }
+
     function bootstrap() public initializer {
         uint256 offset = _getImmutableVariablesOffset();
 
